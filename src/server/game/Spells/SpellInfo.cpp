@@ -20,6 +20,7 @@
 #include "ConditionMgr.h"
 #include "Corpse.h"
 #include "DB2Stores.h"
+#include "FlatSet.h"
 #include "GameTables.h"
 #include "InstanceScript.h"
 #include "Item.h"
@@ -2124,7 +2125,7 @@ SpellCastResult SpellInfo::CheckLocation(uint32 map_id, uint32 zone_id, uint32 a
     {
         case 23333:                                         // Warsong Flag
         case 23335:                                         // Silverwing Flag
-            return (map_id == 489 || map_id == 726) && player && player->InBattleground() ? SPELL_CAST_OK : SPELL_FAILED_REQUIRES_AREA;
+            return (map_id == 489 || map_id == 726 || map_id == 2106) && player && player->InBattleground() ? SPELL_CAST_OK : SPELL_FAILED_REQUIRES_AREA;
         case 34976:                                         // Netherstorm Flag
             return map_id == 566 && player && player->InBattleground() ? SPELL_CAST_OK : SPELL_FAILED_REQUIRES_AREA;
         case 2584:                                          // Waiting to Resurrect
@@ -3714,7 +3715,7 @@ bool SpellInfo::CanSpellProvideImmunityAgainstAura(SpellInfo const* auraSpellInf
                 continue;
 
             auto spellImmuneItr = immuneInfo->SpellEffectImmune.find(static_cast<SpellEffectName>(effectName));
-            if (spellImmuneItr == immuneInfo->SpellEffectImmune.cend())
+            if (spellImmuneItr == immuneInfo->SpellEffectImmune.end())
             {
                 immuneToAllEffects = false;
                 break;
@@ -3735,7 +3736,7 @@ bool SpellInfo::CanSpellProvideImmunityAgainstAura(SpellInfo const* auraSpellInf
                 {
                     bool isImmuneToAuraEffectApply = false;
                     auto auraImmuneItr = immuneInfo->AuraTypeImmune.find(static_cast<AuraType>(auraName));
-                    if (auraImmuneItr != immuneInfo->AuraTypeImmune.cend())
+                    if (auraImmuneItr != immuneInfo->AuraTypeImmune.end())
                         isImmuneToAuraEffectApply = true;
 
                     if (!isImmuneToAuraEffectApply && !auraSpellInfo->IsPositiveEffect(auraSpellEffectInfo->EffectIndex) && !auraSpellInfo->HasAttribute(SPELL_ATTR2_UNAFFECTED_BY_AURA_SCHOOL_IMMUNE))
